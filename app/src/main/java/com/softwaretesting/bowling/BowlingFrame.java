@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 
 class BowlingFrame {
+    private int pinsStanding;
     private int scoreFirstRoll;
     private int scoreSecondRoll;
     private int scoreExtraRoll;
@@ -15,6 +16,7 @@ class BowlingFrame {
     private Random randomGen;
 
     BowlingFrame(boolean isLast) {
+        pinsStanding = 10;
         scoreFirstRoll = 0;
         scoreSecondRoll = 0;
         scoreExtraRoll = 0;
@@ -26,6 +28,7 @@ class BowlingFrame {
     }
 
     BowlingFrame(boolean isLast, long pseudoRandomSeed) {
+        pinsStanding = 10;
         scoreFirstRoll = 0;
         scoreSecondRoll = 0;
         scoreExtraRoll = 0;
@@ -41,10 +44,9 @@ class BowlingFrame {
             throw new IllegalStateException("Attempted to add a roll to a finished frame!");
         }
 
-        int pinsStanding = 10 - scoreTotal;
         if (doRandom) {
             scoreOfRoll = randomGen.nextInt(pinsStanding + 1);
-        } else if (scoreOfRoll > pinsStanding) {
+        } else if (scoreOfRoll > pinsStanding || scoreOfRoll < 0) {
             throw new IllegalArgumentException("That is not a possible score for this roll!");
         }
 
@@ -61,8 +63,21 @@ class BowlingFrame {
         } else if (rollsDone == 2) {
             scoreExtraRoll = scoreOfRoll;
         }
+
         scoreTotal += scoreOfRoll;
         rollsDone += 1;
+
+        // basically we deduct the score from the pins standing
+        pinsStanding -= scoreOfRoll;
+        // but if we are in the last frame, and we strike on the 1st, or 2nd roll, we get back 10 pins
+        if (isLastFrame && rollsDone <= 2 && scoreOfRoll == 10) {
+            pinsStanding = 10;
+        }
+        // also, if we are in th last frame and the second roll resulted in a spare, we get back 10 pins
+        else if (isLastFrame && rollsDone == 2 && isSpare()) {
+            pinsStanding = 10;
+        }
+
         return scoreOfRoll;
     }
 
@@ -81,6 +96,8 @@ class BowlingFrame {
     int getScoreSecondRoll() { return scoreSecondRoll; }
 
     int getScoreTotal() { return scoreTotal; }
+
+    boolean hasExtraRoll() { return hasExtraRoll; }
 
     @NonNull
     public String toString() {

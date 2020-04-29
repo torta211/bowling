@@ -1,7 +1,6 @@
 package com.softwaretesting.bowling;
 
 import android.content.res.Resources;
-
 import androidx.test.espresso.Espresso;
 import androidx.test.rule.ActivityTestRule;
 import org.junit.After;
@@ -15,7 +14,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.*;
 
 public class MainActivityTest {
 
@@ -109,7 +107,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testScoreIsCorrect() {
+    public void testScoreIsCorrectlyDisplayed() {
         // with this seed they score 4 4 in the first frame, then 1 2 in the second
         Resources res = mActivityTestRule.getActivity().res;
         mActivityTestRule.getActivity().seedPlayer1 = 1L;

@@ -85,6 +85,8 @@ class BowlingGameScoreBoard {
         return sum;
     }
 
+    int getScoreOfFrame(int frameIndex) { return framesOfGame[frameIndex].getScoreTotal(); }
+
     boolean hasFinishedTurn() {
         return framesOfGame[currentFrameIndex].isFinished();
     }
